@@ -1,0 +1,55 @@
+version: "3"
+
+includes:
+  dist: ./DistTasks.yml
+
+tasks:
+  build-bhy-controller-tool:
+    desc: Build the bhy controller tool
+    dir: tools/bhy-controller/src
+    cmds:
+      - go build -v
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/spell-check-task/Taskfile.yml
+  general:check-spelling:
+    desc: Check for commonly misspelled words
+    deps:
+      - task: poetry:install-deps
+    cmds:
+      - poetry run codespell
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/spell-check-task/Taskfile.yml
+  general:correct-spelling:
+    desc: Correct commonly misspelled words where possible
+    deps:
+      - task: poetry:install-deps
+    cmds:
+      - poetry run codespell --write-changes
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/poetry-task/Taskfile.yml
+  poetry:install-deps:
+    desc: Install dependencies managed by Poetry
+    cmds:
+      - poetry install --no-root
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/poetry-task/Taskfile.yml
+  poetry:update-deps:
+    desc: Update all dependencies managed by Poetry to their newest versions
+    cmds:
+      - poetry update
+
+vars:
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/release-go-task/Taskfile.yml
+  PROJECT_NAME: bhy
+  DIST_DIR: "dist"
+  # build vars
+  COMMIT:
+    sh: echo "$(git log --no-show-signature -n 1 --format=%h)"
+  TIMESTAMP:
+    sh: echo "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+  TIMESTAMP_SHORT:
+    sh: echo "{{now | date "20060102"}}"
+  TAG:
+    sh: echo "$(git tag --points-at=HEAD 2> /dev/null | head -n1)"
+  VERSION: "{{if .NIGHTLY}}nightly-{{.TIMESTAMP_SHORT}}{{else if .TAG}}{{.TAG}}{{else}}{{.PACKAGE_NAME_PREFIX}}git-snapshot{{end}}"
+  TOOL_DIR:
+    sh: echo "`pwd`/tools/bhy-controller/src"
