@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <script src="https://cdn.plot.ly/plotly-2.4.2.min.js"></script>
+
+    <title>Sensor page</title>
+  </head>
+  <body>
+
+    <!-- Connection form -->
+
+    <br>
+    <!-- <hr><br> -->
+    <div class="container text-center">
+
+      <div class="row">
+        <!-- <div class="col-md-3 offset-md-3"> -->
+        <div class="col"> 
+          <h3>Connect to Nicla</h3>  
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col"> 
+          <button id="connectButton" name="connectButton" class="btn btn-primary">Connect</button>
+        </div>
+      </div>
+
+      <br>
+
+      <div class="row">
+        <div class="col"> 
+          <h8> <i>Current status: </i></h8><span id="connectionStatus" class="badge rounded-pill bg-danger">Disconnected</span>
+        </div>
+      </div>
+
+    </div>
+    <br><hr><br>
+
+
+    <!-- Configuration form -->
+
+    <div class="container text-center">
+
+      <h3>Sensor Configuration</h3>
+
+      <div class="row input-group">
+
+        <div class="col-md-3 input-group">
+          <span class="input-group-text" id="basic-addon1">Sensor </span>
+          <input id="sensorId" name="sensorId" type="text" class="form-control" aria-describedby="basic-addon1"> 
+        </div>
+        <div class="col-md-3 input-group">
+          <span class="input-group-text" id="basic-addon1">Sample Rate </span>
+          <input id="rate" name="rate" type="text" class="form-control input-md">
+        </div>
+        <div class="col-md-3 input-group">
+          <span class="input-group-text" id="basic-addon1">Latency </span>
+          <input id="latency" name="latency" type="text" class="form-control input-md">
+        </div>
+        <div class="col-md-3 input-group">
+          <button type="button" id="configureButton" name="configureButton" class="btn btn-primary">Configure</button> 
+        </div>
+
+      </div>
+
+    </div>
+    <br><hr><br>
+
+    <!-- Read sensor data form -->
+    <div class="container text-center">
+      <h3>Read sensor data</h3>  
+      <table id="dataTable" class="table table-bordered" style="table-layout:auto; width:100%;">
+        <thead>
+          <tr>
+            <th scope="col" style="width: 10%;">Sensor ID</th>
+            <th scope="col" style="width: 14%;">Sensor Name</th>
+            <th scope="col" style="width: 25%;">Data</th>
+            <th scope="col" style="width: 7%;">Status</th>
+            <th scope="col" style="width: 44%;">Chart</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>
+
+<script>
+
+document.getElementById('sensorId').value = '10';
+document.getElementById('rate').value = '0';
+document.getElementById('latency').value = '0';
+
+const sensorServiceUuid = '34c2e3bb-34aa-11eb-adc1-0242ac120002';
+const sensorConfigCharacteristicUuid = '34c2e3bd-34aa-11eb-adc1-0242ac120002';
+const sensorDataCharacteristicUuid = '34c2e3bc-34aa-11eb-adc1-0242ac120002';
+const sensorLongDataCharacteristicUuid = '34c2e3be-34aa-11eb-adc1-0242ac120002';
+
+var bleDevice
+var bleServer
+var sensorService
+var sensorConfigCharacteristic
+var sensorDataCharacteristic
+var sensorLongDataCharacteristic
+
+var sensorMap = new Map();
+var parseScheme;
+var sensorTypes;
+var sensorTypesLen;
+
+fetch("./parse-scheme.json")
+  .then(response => response.json())
+  .then(json => {
+    console.log(json);
+    parseScheme = json;
+  });
+
+fetch("./sensor-type-map.json")
+  .then(response => response.json())
+  .then(json => {
+    console.log(json);
+    sensorTypes = json;
+    var counter = 0;
+    sensorTypesLen = Object.keys(sensorTypes).length;
+    console.log("Json length: ", sensorTypesLen);
+    fillSensorTable();
+  });
+
+
+document.querySelector('#connectButton').addEventListener('click', function() {
+  if (isWebBluetoothEnabled()) { 
+    connect() 
+    .then(_ => {
+      console.log('Connected')
+      document.querySelector('#configureButton').disabled = false
+    })
+    .catch(error => {
+      console.log('ERROR: ' + error);
+    });
+  }
+});
+
+document.querySelector('#configureButton').addEventListener('click', 
+  _=> {
+    var sensorId = parseInt(document.getElementById('sensorId').value);
+    var sampleRate = parseFloat(document.getElementById('rate').value);
+    var latency = parseInt(document.getElementById('latency').value);
+
+    if (sensorTypes[sensorId].name) {
+
+      var configPacket = new Uint8Array(9);
+      configPacket[0] = sensorId;
+      configPacket.set(floatToBytes(sampleRate), 1);
+      configPacket.set(intToBytes(latency), 5);
+      console.log(configPacket);
+
+      sensorConfigCharacteristic.writeValue(configPacket)
+      .then(_ => {  
+        console.log('Configuration written');
+      });
+
+      //Handle individual Enabled buttons
+      var table = document.getElementById("dataTable");
+      if (sensorMap.has(sensorId)) {
+        rowIndex = sensorMap.get(sensorId);
+        var row = table.rows[rowIndex];
+        row.cells[3].firstChild.style.backgroundColor = "limegreen";
+      } else {
+        var tableLength = table.rows.length;
+        sensorMap.set(sensorId, tableLength);
+        var row = table.insertRow(tableLength);
+        var cell = row.insertCell(0);
+        cell.innerHTML = sensorId;
+        cell = row.insertCell(1);
+        cell.innerHTML = sensorTypes[sensorId].name;
+        cell = row.insertCell(2);
+        cell.innerHTML = 0;
+        cell = row.insertCell(3);
+        cell.innerHTML = '<input id="Button" type="button" value="Enabled" onclick="updateSensorStatus(this, \'' + sensorId + '\');"/>'
+        row.cells[3].firstChild.style.backgroundColor = "limegreen";
+        cell = row.insertCell(4);
+        var chartIdx = sensorTypes[sensorId].name;
+        cell.innerHTML = '<div id=\'' + chartIdx + '\'></div>';
+      }
+    }
+
+
+  }
+);
+
+function floatToBytes(value) {
+  var tempArray = new Float32Array(1);
+  tempArray[0] = value;
+  return new Uint8Array(tempArray.buffer);
+}
+
+function intToBytes(value) {
+  var tempArray = new Int32Array(1);
+  tempArray[0] = value;
+  return new Uint8Array(tempArray.buffer);
+}
+
+function isWebBluetoothEnabled() {
+  if (!navigator.bluetooth) {
+    console.log('Web Bluetooth is NOT available!')
+    return false
+  }
+  console.log('Web Bluetooth is available!')
+  return true
+}
+
+function getDeviceInfo() {
+  let options = {
+    filters: [{ services: [sensorServiceUuid]}]    
+  };
+  console.log('Requesting BLE device info...');
+  return navigator.bluetooth.requestDevice(options).then(device => {
+    bleDevice = device
+  }).catch(error => {
+    console.log('Request device error: ' + error)
+  });
+}
+
+function connect() {
+  return getDeviceInfo()
+  .then(connectDevice)
+  .then(getSensorCharacteristics)
+  .then(onConnection);
+}
+
+function connectDevice() {
+  console.log('Connecting to device')
+  bleDevice.addEventListener('gattserverdisconnected', onDisconnection);
+  return bleDevice.gatt.connect()
+  .then(server => {
+    bleServer = server;
+    return bleServer.getPrimaryService(sensorServiceUuid);
+  })
+  .then(service => {
+    sensorService = service;
+  });
+}
+
+function onDisconnection(event) {
+  var status = document.getElementById("connectionStatus");
+  status.innerHTML = "Disconnected";
+  status.className = "badge rounded-pill bg-danger";
+}
+
+function onConnection() {
+  var status = document.getElementById("connectionStatus");
+  status.innerHTML = "Connected";
+  status.className = "badge rounded-pill bg-success";
+}
+
+function getSensorCharacteristics() {
+  console.log('Getting sensor characteristics');
+  return sensorService.getCharacteristic(sensorConfigCharacteristicUuid)
+  .then(characteristic => {
+    sensorConfigCharacteristic = characteristic;
+  })
+  .then(_ => {
+    return sensorService.getCharacteristic(sensorDataCharacteristicUuid);
+  })
+  .then(characteristic => {
+    sensorDataCharacteristic = characteristic;
+    sensorDataCharacteristic.startNotifications();
+    sensorDataCharacteristic.addEventListener('characteristicvaluechanged', receiveSensorData)
+  })
+  .then(_ => {
+    return sensorService.getCharacteristic(sensorLongDataCharacteristicUuid);
+  })
+  .then(characteristic => {
+    sensorLongDataCharacteristic = characteristic;
+    sensorLongDataCharacteristic.startNotifications();
+    sensorLongDataCharacteristic.addEventListener('characteristicvaluechanged', receiveSensorData)
+  });
+}
+
+function updateSensorStatus(_this, sensor) {
+  var configPacket = new Uint8Array(9);
+  configPacket[0] = sensor;
+
+  if (_this.style.backgroundColor == "limegreen") {
+    //Turn sensor OFF
+    console.log("Disable sensor ", sensor);
+    configPacket.set(floatToBytes(0), 1);
+    configPacket.set(intToBytes(0), 5);
+    console.log(configPacket);
+    sensorConfigCharacteristic.writeValue(configPacket)
+    .then(_ => {  
+      console.log('Configuration written');
+    });
+    _this.style.backgroundColor = "";
+  } else {
+    //Turn sensor ON
+    console.log("Enable sensor ", sensor);
+    configPacket.set(floatToBytes(1), 1);
+    console.log(configPacket);
+    sensorConfigCharacteristic.writeValue(configPacket)
+    .then(_ => {  
+      console.log('Configuration written');
+    });
+    _this.style.backgroundColor = "limegreen";
+  }
+}
+
+function fillSensorTable() {
+  var table = document.getElementById("dataTable");
+  var tableLength = table.rows.length;
+
+  for (let i = 0; i < sensorTypesLen - 1; i++) {
+    var key = Object.keys(sensorTypes)[i];
+    if (sensorTypes[key].dashboard == 1) {
+      var tableLength = table.rows.length;
+      var sensorIdx = parseInt(key)
+      sensorMap.set(sensorIdx, tableLength);
+      var row = table.insertRow(tableLength);
+      var cell = row.insertCell(0);
+      cell.innerHTML = key;
+      cell = row.insertCell(1);
+      cell.innerHTML = sensorTypes[key].name;
+      cell = row.insertCell(2);
+      cell.innerHTML = 0;
+      cell = row.insertCell(3);
+      cell.innerHTML = '<input id="Button" type="button" value="Enabled" onclick="updateSensorStatus(this, \'' + sensorIdx + '\');"/>'
+      cell = row.insertCell(4);
+      var chartIdx = sensorTypes[sensorIdx].name;
+      cell.innerHTML = '<div id=\'' + chartIdx + '\'></div>';
+    }
+  }
+}
+
+a=[]; b=[]; c=[];
+
+function receiveSensorData(event) {
+  var value = event.target.value;
+  // Get sensor data
+  var sensor = value.getUint8(0);
+  var size = value.getUint8(1);
+  console.log(value)
+  var parsedData = parseData(sensor, value);
+  parsedName = parsedData[0]
+  parsedStringValue = parsedData[1]
+  parsedValue = parsedData[2]
+
+  var table = document.getElementById("dataTable");
+  // If sensor is already in the table -> update its value
+  if (sensorMap.has(sensor)) {
+    rowIndex = sensorMap.get(sensor);
+    var row = table.rows[rowIndex];
+    var cell = row.cells[0];
+    cell.innerHTML = sensor;
+    cell = row.cells[1];
+    cell.innerHTML = parsedName;
+    cell = row.cells[2];
+    cell.innerHTML = parsedStringValue;
+    cell = row.cells[4];
+    var chartIdx = parsedName;
+
+    var cnt = 0;
+
+    if (sensorTypes[sensor].scheme == "singleRead") {
+
+      //Initial condition to draw the first chart point
+      if (sensorTypes[sensor].value == 0) {   //Plot doesn't exist yet because no valid data have been received
+        if (parsedValue != 0) {   //First valid data received: draw it in the chart
+          Plotly.newPlot(chartIdx,[{y:[parsedValue],type:'line'}]);
+          //Update json to signal that the reception started
+          cnt = sensorTypes[sensor].value + 1;
+          sensorTypes[sensor].value = cnt;
+        }
+      } else {    //Plot already exists
+        Plotly.extendTraces(chartIdx,{y:[[parsedValue]]}, [0]);
+        cnt = sensorTypes[sensor].value;
+        sensorTypes[sensor].value = cnt + 1;
+      }
+
+      if (cnt > 200) {
+        Plotly.relayout(chartIdx,{
+          xaxis: {
+            range: [cnt-200,cnt]
+          }
+        });
+      }
+
+    } else if (sensorTypes[sensor].scheme == "xyz") {
+        //Parse 3D axes values
+        const arrXYZValues = parsedStringValue.split(" ");
+        console.log("Split: ", arrXYZValues);
+        console.log("Split[1]: ", arrXYZValues[1]);
+        console.log("Split[5]: ", arrXYZValues[5]);
+        console.log("Split[9]: ", arrXYZValues[9]);
+
+      //Initial condition to draw the first chart point
+      if (sensorTypes[sensor].value == 0) {   //Plot doesn't exist yet because no valid data have been received
+        if (parsedValue != 0) {   //First valid data received: draw it in the chart
+          Plotly.newPlot(chartIdx,[{x:[arrXYZValues[1]],y:[arrXYZValues[5]],z:[arrXYZValues[9]],type:'mesh3d'}]);
+          //Update json to signal that the reception started
+          sensorTypes[sensor].value = parsedValue;
+        }
+      } else {    //Plot already exists
+        Plotly.extendTraces(chartIdx,{x:[[arrXYZValues[1]]],y:[[arrXYZValues[5]]],z:[[arrXYZValues[9]]]}, [0]);
+      }
+
+    } else if (sensorTypes[sensor].scheme == "BSECOutput") {
+        //Parse BSEC values
+        const BSECValues = parsedStringValue.split(" ");
+        console.log("Split: ", BSECValues);
+        console.log("Split[1]: ", BSECValues[2]);
+        console.log("Split[7]: ", BSECValues[7]);
+
+        var val1 = BSECValues[2];
+        var val2 = BSECValues[7];
+
+        if (sensorTypes[sensor].value == 0) {   //Plot doesn't exist yet because no valid data have been received
+          if (val1 != 0 && val2 != 0) {   //First valid data received: draw it in the chart
+            Plotly.newPlot(chartIdx,[{y:[val1],name: 'Temp',type:'line'},{y:[val2],name: 'Humidity',type:'line'}]);
+            //Update json to signal that the reception started
+            cnt = sensorTypes[sensor].value + 1;
+            sensorTypes[sensor].value = cnt;
+          }
+        } else {    //Plot already exists
+          Plotly.extendTraces(chartIdx,{y:[[val1]]}, [0]);
+          Plotly.extendTraces(chartIdx,{y:[[val2]]}, [1]);
+          cnt = sensorTypes[sensor].value;
+          sensorTypes[sensor].value = cnt + 1;
+        }
+
+        if (cnt > 150) {
+          Plotly.relayout(chartIdx,{
+            xaxis: {
+              range: [cnt-150,cnt]
+            }
+          });
+        }
+    } else if (sensorTypes[sensor].scheme == "BSECOutputV2") {
+        //Parse BSEC values
+        const BSECValues = parsedStringValue.split(" ");
+        console.log("Split: ", BSECValues);
+
+        var val1 = BSECValues[1];   //iaq
+        var val2 = BSECValues[5];   //iaq-s
+        var val3 = BSECValues[9] * 1000;   //b-voc-eq
+        var val4 = BSECValues[13];  //co2-eq
+        var val5 = BSECValues[17];  //status
+
+        if (sensorTypes[sensor].value == 0) {   //Plot doesn't exist yet because no valid data have been received
+          if (val4 != 0) {   //First valid data received: draw it in the chart, valid CO2-eq output is always greater than 0
+              Plotly.newPlot(chartIdx,
+                  [
+                      {y:[val1],name:'IAQ',type:'line'}, {y:[val2],name:'IAQ-S',type:'line'},
+                      {y:[val3],name:'bVOC-eq (ppb)',type:'line'}, {y:[val4],name:'CO2-eq (ppm)',type:'line'}
+                  ]);
+            //Update json to signal that the reception started
+            cnt = sensorTypes[sensor].value + 1;
+            sensorTypes[sensor].value = cnt;
+          }
+        } else {    //Plot already exists
+          Plotly.extendTraces(chartIdx,{y:[[val1]]}, [0]);
+          Plotly.extendTraces(chartIdx,{y:[[val2]]}, [1]);
+          Plotly.extendTraces(chartIdx,{y:[[val3]]}, [2]);
+          Plotly.extendTraces(chartIdx,{y:[[val4]]}, [3]);
+          cnt = sensorTypes[sensor].value;
+          sensorTypes[sensor].value = cnt + 1;
+        }
+
+        if (cnt > 150) {
+          Plotly.relayout(chartIdx,{
+            xaxis: {
+              range: [cnt-150,cnt]
+            }
+          });
+        }
+
+    } else if (sensorTypes[sensor].scheme == "BSEC2GasClassifierOutput") {
+        //Parse BSEC values
+        const BSECValues = parsedStringValue.split(" ");
+        console.log("Split: ", BSECValues);
+
+        var val0 = BSECValues[1];   //gas 0 probability (%)
+        var val1 = BSECValues[5];   //gas 1 probability (%)
+        var val2 = BSECValues[9];   //gas 2 probability (%)
+        var val3 = BSECValues[13];  //gas 3 probability (%)
+        //var status = BSECValues[17];  //status
+        //var total = (val0+val1+val2+val3);
+
+        if (sensorTypes[sensor].value == 0) {   //Plot doesn't exist yet because no valid data have been received
+            Plotly.newPlot(chartIdx,
+                [
+                    {y:[val0],name:'Gas0 probability(%)',type:'line'}, {y:[val1],name:'Gas1 probability(%)',type:'line'},
+                    {y:[val2],name:'Gas2 probability(%)',type:'line'}, {y:[val3],name:'Gas3 probability(%)',type:'line'}
+                ]);
+            //Update json to signal that the reception started
+            cnt = sensorTypes[sensor].value + 1;
+            sensorTypes[sensor].value = cnt;
+        } else {    //Plot already exists
+            Plotly.extendTraces(chartIdx,{y:[[val0]]}, [0]);
+            Plotly.extendTraces(chartIdx,{y:[[val1]]}, [1]);
+            Plotly.extendTraces(chartIdx,{y:[[val2]]}, [2]);
+            Plotly.extendTraces(chartIdx,{y:[[val3]]}, [3]);
+            cnt = sensorTypes[sensor].value;
+            sensorTypes[sensor].value = cnt + 1;
+        }
+
+        if (cnt > 150) {
+            Plotly.relayout(chartIdx,{
+                xaxis: {
+                    range: [cnt-150,cnt]
+                }
+            });
+        }
+
+    }
+  }
+}
+
+function parseData(sensor, data) {
+  var sensorName = sensorTypes[sensor].name;
+  var scheme = sensorTypes[sensor].scheme;
+  var result = "";
+  var parse_scheme;
+  var eventcount;
+  // dataIndex start from 2 because the first bytes of the packet indicate
+  // the sensor id and the data size
+  var dataIndex = 0 + 2;
+  var value = 0;
+
+  if (scheme == "singleRead") {
+    parse_scheme = sensorTypes[sensor]["parse-scheme"];
+  } else if (scheme == "quaternion") {
+    parse_scheme = parseScheme["types"][0]["parse-scheme"];
+  } else if (scheme == "xyz") {
+    parse_scheme = parseScheme["types"][1]["parse-scheme"];
+  } else if (scheme == "orientation") {
+    parse_scheme = parseScheme["types"][2]["parse-scheme"];
+  } else if (scheme == "event") {
+    eventcount = sensorTypes[sensor].eventcount;
+    parse_scheme = parseScheme["types"][3]["parse-scheme"];
+  } else if (scheme == "activity") {
+    parse_scheme = parseScheme["types"][4]["parse-scheme"];
+  } else if (scheme == "BSECOutput") {
+    parse_scheme = parseScheme["types"][5]["parse-scheme"];
+  } else if (scheme == "BSECOutputV2") {
+      var size = data.getUint8(1);
+      if (size <= 10) {
+         parse_scheme = parseScheme["types"][6]["parse-scheme"];
+      } else {
+         parse_scheme = parseScheme["types"][7]["parse-scheme"];
+      }
+  } else if (scheme == "BSEC2DataCollectorOutput") {
+    parse_scheme = parseScheme["types"][8]["parse-scheme"];
+  } else if (scheme == "BSEC2GasClassifierOutput") {
+    parse_scheme = parseScheme["types"][9]["parse-scheme"];
+  }
+
+  parse_scheme.forEach(element => {
+    console.log(element);
+    var name = element['name'];
+    var valueType = element['type'];
+    var scale = element['scale-factor'];
+    var size = 0;
+
+    if (valueType == "uint8") {
+      value = data.getUint8(dataIndex, true) * scale; 
+      size = 1;
+    } else if (valueType == "int8") {
+      value = data.getInt8(dataIndex, true) * scale; 
+      size = 1;
+    } else if (valueType == "uint16") {
+      value = data.getUint16(dataIndex, true) * scale; 
+      size = 2;
+    } else if (valueType == "int16") {
+      value = data.getInt16(dataIndex, true) * scale; 
+      size = 2;
+    } else if (valueType == "uint24") {
+      value = data.getUint16(dataIndex, true) + (data.getUint8(dataIndex+2, true) << 16);
+      value = value * scale;
+      size = 3;
+    } else if (valueType == "uint32") {
+      value = data.getUint16(dataIndex, true) + (data.getUint16(dataIndex+2, true) << 16);
+      value = value * scale;
+      size = 4;
+    } else if (valueType == "float") {
+      value = data.getFloat32(dataIndex, true) * scale; 
+      size = 4;
+    } else if (valueType == "uint64") {
+      valLow = data.getUint32(dataIndex, true)
+      valHigh = data.getUint32(dataIndex + 4, true)
+      value = (valLow + (valHigh * 2**32)) * scale
+      //value = (valLow) * scale
+      //console.log('value:' + value + 'scale:' + scale)
+      size = 8;
+    } else if (valueType == "none") {
+      value = eventcount + 1;
+      sensorTypes[sensor].eventcount = value;
+      size = 0;
+    } else {
+      console.log("Error: unknown type");
+    }
+
+    if (scheme == "activity") {
+      value = geActivityString(value);
+    }
+    result = result + element.name + ": " + value + "   ";
+    console.log(dataIndex);
+    dataIndex += size;
+
+  });
+
+  return [sensorName, result, value];
+}
+
+function geActivityString(value) {
+
+  const activityMessages = ["Still activity ended",
+                            "Walking activity ended",
+                            "Running activity ended",
+                            "On bicycle activity ended",
+                            "In vehicle activity ended",
+                            "Tilting activity ended",
+                            "In vehicle still ended",
+                            "",
+                            "Still activity started",
+                            "Walking activity started",
+                            "Running activity started",
+                            "On bicycle activity started",
+                            "In vehicle activity started",
+                            "Tilting activity started",
+                            "In vehicle still started",
+                            ""];
+
+  for (let i = 0; i < 16; i++) {
+    maskedVal = (value & (0x0001 << i)) >> i;
+    if (maskedVal) {
+      console.log(activityMessages[i]);
+      return [activityMessages[i]];
+    }
+  }
+}
+
+</script>
