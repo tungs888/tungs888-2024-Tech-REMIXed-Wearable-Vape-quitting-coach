@@ -2,11 +2,11 @@ Wearable for Positive Social Change
 
   
 
-Vaping among teenagers is a growing and urgent public health concern. US 2021 survey suggests that around 4.5% of US adults aged 18 and above use electronic cigarettes regularly, with vape usage rising to 11% among aged 18 to 24. 30% of high school students and over 10% of middle schoolers vape on a regular basis.   Current central administrated Vape detectors in high school bathroom and classroom like Verkada cost $750-$1000 each with $75 annual cloud administration fee.  It’s group policing and punishing option put teacher and student against each other and make school like a jail. 
+Vaping among teenagers is a growing and urgent public health concern. US 2021 survey suggests that around 4.5% of US adults aged 18 and above use electronic cigarettes regularly, with vape usage rising to 11% among aged 18 to 24. 30% of high school students and over 10% of middle schoolers vape on a regular basis.   Current central administrated Vape detectors in high school bathroom and classroom like Verkada cost $750-$1000 each with additional $75 annual administration fee.  It’s group policing and punishing option put teacher against student and run school like a jail. 
 
   
 
-Wearable Vape quitting coach - is a multi-pronged approach combining latest personal vape detection wearable sensors, AI coaching, gamification, and role-playing support while brave teens overcoming temptation of nicotine addiction in a painful personal journey, with instant game incentives. The Wearable Bosch air quality sensors provide individual real-time detection, tracking and rewards. They are a part of a larger strategy to engage, empower, and partner with individual motivated teens to continue and success on their journey to becoming vape-free.  As a loving supportive family, instead herding a crowded jail. 
+Wearable Vape quitting coach - is a multi-pronged approach combining wearable vape sensors, AI coaching, and turn quit vaping into role-playing reality game.    The brave teens overcoming temptation of nicotine addiction in a painful personal journey, with instant game rewards. The Wearable Bosch air quality sensors provide individual real-time detection, tracking and rewards. They are a part of a larger strategy to engage, empower, and partner with individual motivated teens to continue and success on their journey to becoming vape-free.  As a loving supportive family, instead herding a crowd in jail. 
 
   
 
