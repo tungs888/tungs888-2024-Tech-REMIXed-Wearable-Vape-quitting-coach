@@ -2,7 +2,7 @@ Wearable for Positive Social Change
 
   
 
-Vaping among teenagers is a growing and urgent public health concern. US 2021 survey suggests that around 4.5% of US adults aged 18 and above use electronic cigarettes regularly, with vape usage rising to 11% among aged 18 – 24. 30% of high school students and over 10% of middle schoolers vape on a regular basis.   Current central administrated Vape detectors in high school bathroom and classroom like Verkada cost $750-$1000 each with $75 annual cloud administration fee.  It’s group policing and punishing option put teacher and student against each other and make school like a jail. 
+Vaping among teenagers is a growing and urgent public health concern. US 2021 survey suggests that around 4.5% of US adults aged 18 and above use electronic cigarettes regularly, with vape usage rising to 11% among aged 18 to 24. 30% of high school students and over 10% of middle schoolers vape on a regular basis.   Current central administrated Vape detectors in high school bathroom and classroom like Verkada cost $750-$1000 each with $75 annual cloud administration fee.  It’s group policing and punishing option put teacher and student against each other and make school like a jail. 
 
   
 
