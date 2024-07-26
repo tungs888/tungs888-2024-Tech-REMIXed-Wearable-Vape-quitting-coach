@@ -2,19 +2,11 @@ Wearable for Positive Social Change
 
   
 
-Vaping among teenagers is a growing and urgent public health concern. US 2021 survey suggests that around 4.5% of US adults aged 18 and above use electronic cigarettes regularly, with vape usage rising to 11% among aged 18 – 24. 30% of high school students and over 10% of middle schoolers vape on a regular basis 
+Vaping among teenagers is a growing and urgent public health concern. US 2021 survey suggests that around 4.5% of US adults aged 18 and above use electronic cigarettes regularly, with vape usage rising to 11% among aged 18 – 24. 30% of high school students and over 10% of middle schoolers vape on a regular basis.   Current central administrated Vape detectors in high school bathroom and classroom like Verkada cost $750-$1000 each with $75 annual cloud administration fee.  It’s group policing and punishing option put teacher and student against each other and make school like a jail. 
 
   
 
-Wearable Vape quitting coach - is a multi-pronged approach combining latest vape detection technology, AI gamification coaching, and role-playing companionship while brave teens overcome nicotine addiction abyss and temptations in a painful in person hero's journey, with instant game incentives. The wearable Bosch air quality sensors provide real-time detection, tracking and rewards. They are a part of a larger strategy to empower teens to continue motivated on their journey to becoming vape-free.   
-
-  
-
-Precision logs opening a dialogue - A detector triggering can prompt an open and honest conversation between a parent/caregiver and the teen about the dangers of vaping and the desire to help themself quit. 
-
-Neutral report: Detectors can remove the burden from teens to tell on friends or classmates who vape. This can make them more open to seeking help themselves. 
-
-Empower Support Systems: The best approach is to use detectors alongside support systems like counseling, resources to quite vaping, and positive reinforcement for not vaping. 
+Wearable Vape quitting coach - is a multi-pronged approach combining latest personal vape detection wearable sensors, AI coaching, gamification, and role-playing support while brave teens overcoming temptation of nicotine addiction in a painful personal journey, with instant game incentives. The Wearable Bosch air quality sensors provide individual real-time detection, tracking and rewards. They are a part of a larger strategy to engage, empower, and partner with individual motivated teens to continue and success on their journey to becoming vape-free.  As a loving supportive family, instead herding a crowded jail. 
 
   
 
@@ -28,11 +20,19 @@ This project will seeking a collaborative effort between three entities:
 
 UVanguard Consulting: will provide expertise in teen health and addiction recovery with Bosch Sensortech design the Vape quitting coach hardware together. 
 
-Electronics Art (EA): EA will donate in-game currency or virtual goods within their popular games as rewards for teens achieving milestones in their quitting journey. 
+Electronics Art (EA): EA will donate in-game currency or virtual goods within their popular games as rewards for teens achieving milestones in their quitting journey. Microsoft: Microsoft will contribute by donating access to their Xbox Game Pass or similar services, creating another rewarding incentive for sustained progress and server for cloud data analysis. 
 
-Microsoft: Microsoft will contribute by donating access to their Xbox Game Pass or similar services, creating another rewarding incentive for sustained progress and server for cloud data analysis. 
+School consoler will closely monitor and support individual progress of quitting and timely interact  
 
-  
+ 
+
+Precision individual logs opening a dialogue - A detector triggering can prompt an open and honest conversation between a parent/caregiver and the teen about the dangers of vaping and the desire to help themself quit. 
+
+Neutral report: Detectors can remove the burden from teens to tell on friends or classmates who vape. This can make them more open to seeking help themselves. 
+
+Empower Support Systems: The best approach is to use detectors alongside support systems like counseling, resources to quite vaping, and positive reinforcement for not vaping. 
+
+ 
 
 Wearable Vape quitting Coach Description: 
 
@@ -54,15 +54,39 @@ Benefits
 
   
 
-Real-time Data Tracking: Provides immediate feedback on vaping activity, allowing teens to see their progress and identify areas for improvement. 
+Real-time individual data, Tracking Monitoring Nicotine Exposure: Provides immediate feedback on vaping activity.  Reward when overcoming addiction, engage when weak in resisting temptations. 
 
-Increased Motivation: Gamification elements and rewards incentivize continued progress and celebrate achievements. 
+The sensor can track the amount of nicotine a teen is exposed to throughout the day. This data can help them see their progress over time and identify situations or activities that trigger cravings and identify areas for improvement. 
 
-Positive Reinforcement: Earning rewards from well-known gaming companies adds a layer of excitement and reinforces positive behavior. 
+ 
 
-Supportive Community: The mobile app can foster a supportive online community where teens can connect with peers facing similar challenges. 
+Increased Motivation: Gamification elements and deserved rewards incentivize continued progress and celebrate achievements. 
+
+Positive Reinforcement: Earning rewards from well-known gaming companies adds a layer of excitement and reinforces positive behavior. It can change the culture from vaping being adult like to hero those who beat nicotine and earn respect from industry giants. 
+
+Supportive Community: The mobile app can foster a supportive online community where teens can connect with peers facing similar challenges.  
+
+Awareness and Accountability: Having real-time data on nicotine exposure can create awareness of vaping habits and help them to hold themself accountable for their nicotine free goals. 
 
   
+
+Positive Behavior Change: 
+
+  
+
+Positive Reinforcement: By tracking progress with the sensor, teens can celebrate milestones and nicotine-free days. This positive reinforcement can encourage them to stay on track. 
+
+Goal Setting and Adjustment: Seeing the data can help teens and their caregivers set realistic goals and adjust strategies if needed. 
+
+Additional Benefits: 
+
+  
+
+Honest Conversations: The sensor data can open honest conversations with parents or caregivers about cravings, challenges, and successes during the quitting process. 
+
+Empowerment: Using an induvial sensor can empower teens to take control of their own quitting journey. 
+
+ 
 
 Evaluation 
 
@@ -82,7 +106,7 @@ Conclusion
 
   
 
-This project offers a promising approach to support teens in quitting vaping. By combining real-time data tracking with engaging gamification and attractive rewards, we can empower teens to make healthier choices and achieve a vape-free future. The collaboration between our organization, EA, and Microsoft demonstrates a commitment to leveraging technology for positive social change. 
+Instead of monitoring the location of large vaping crowds, the wearable sensor offers a promising individual approach to support each teen in quitting addiction journey. By combining real-time data tracking with engaging gamification and attractive rewards, we now can empower individual teens to make healthier choices and achieve a vape-free future. The collaboration between our organization, EA, Microsoft, and school demonstrates a commitment to Wearable for Positive Social Change. 
 
   
 
@@ -96,7 +120,7 @@ Shape and Material:
 
 Base: A square stainless-steel base measuring half an inch by half an inch (12.7mm x 12.7mm). Stainless steel provides a sleek and durable feel. 
 
-Top: Full color e-ink display illuminating Personal hero's encouraging word, companionship alone Hero's Journey while overcoming abyss of addiction pain 
+Top: Full color e-ink display illuminating Personal hero's encouraging word, companionship alone Hero's Journey while overcoming addiction pain 
 
   
 
@@ -114,11 +138,13 @@ Attached to a watch band using a flexible loop.
 
 Worn as a pendant on a necklace or bracelet (if a loop attachment point is included on the side). 
 
-If the visual appeal of a wearable vapes detector tag is not popular among teens, the final product could be further refined based on user feedback and technical feasibility.  The Vape senor can shrink to a dongle plug in cell phone, or a pen with BLE Bluetooth (which help overcome habit of holding electronic cigarette in hand) 
-
-  
+ 
 
 The design aims to be discreet yet stylish. The small size ensures it can be worn comfortably without being too noticeable. The material choices and optional design elements create a modern and sophisticated look that complements most styles. 
+
+ 
+
+If the visual appeal of a wearable vapes detector tag is not popular among teens, the final product could be further refined based on user feedback and technical feasibility.  The Vape senor can shrink to a ring, a dongle, or a pen with BLE Bluetooth (which replace feeling touch electronic cigarette in hand) 
 
   
 
@@ -128,35 +154,9 @@ Additional Considerations:
 
 Battery life: The tag should have a long-lasting battery that can be easily replaced. 
 
-Data connectivity: The tag connects to a smartphone app via Bluetooth to track vaping activity and offer support resources. However, this would require privacy security. 
+Data connectivity: The tag connects to a smartphone app via Bluetooth to track vaping activity and offer support resources. However, this would require privacy authorization. 
 
   
-
-Tracking Progress and Identifying Triggers: 
-
-  
-
-Monitoring Nicotine Exposure: The sensor can track the amount of nicotine a teen is exposed to throughout the day. This data can help them see their progress over time and identify situations or activities that trigger cravings. 
-
-Awareness and Accountability: Having real-time data on nicotine exposure can create awareness of vaping habits and hold them accountable for their quitting goals. 
-
-  
-
-Positive Social Behavior Change: 
-
-  
-
-Positive Reinforcement: By tracking progress with the sensor, teens can celebrate milestones and nicotine-free days. This positive reinforcement can encourage them to stay on track. 
-
-Goal Setting and Adjustment: Seeing the data can help teens and their caregivers set realistic goals and adjust strategies if needed. 
-
-Additional Benefits: 
-
-  
-
-Honest Conversations: The sensor data can open up honest conversations with parents or caregivers about cravings, challenges, and successes during the quitting process. 
-
-Empowerment: Using a sensor can empower teens to take control of their own quitting journey. 
 
 Here's what to keep in mind: 
 
@@ -166,7 +166,7 @@ Sensors are Tools, not a Solution: The sensor itself won't stop the addiction. I
 
 Privacy Concerns: Data privacy related to nicotine exposure needs to be addressed with any wearable sensor solution. 
 
-Overall, wearable nicotine quitting sensors hold promise as a tool to help teens quit vaping by providing data-driven insights and supporting behavior change. 
+Overall, wearable vape sensors hold promise as a tool to help teens quit vaping by providing data-driven insights and supporting behavior change. 
 
   
 
